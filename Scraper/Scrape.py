@@ -15,7 +15,8 @@ def get_jobs(keyword, num_jobs, verbose):
 
     # Change the path to where chromedriver is in your home folder.
     driver = webdriver.Chrome(
-        executable_path="Users/junia/Downloads/chromedriver_win32", options=options)
+        service=Service("C:/Users/junia/Downloads/chromedriver_win32"))
+        #executable_path="Users/junia/Downloads/chromedriver_win32", options=options)
     driver.set_window_size(1120, 1000)
 
     url = 'https://www.glassdoor.com/'#Job/jobs.htm?sc.keyword="' + keyword + '"&locT=C&locId=1147401&locKeyword=San%20Francisco,%20CA&jobType=all&fromAge=-1&minSalary=0&includeNoSalaryJobs=true&radius=100&cityId=-1&minRating=0.0&industryId=-1&sgocId=-1&seniorityType=all&companyId=-1&employerSizes=0&applicationType=0&remoteWorkType=0'
