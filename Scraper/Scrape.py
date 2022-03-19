@@ -142,7 +142,7 @@ def get_jobs(keyword, num_jobs, verbose):
                 revenue = -1
                 competitors = -1
 
-            if not verbose:
+            if verbose:
                 print("Size: {}".format(size))
                 print("Founded: {}".format(founded))
                 print("Type: {}".format(ownership_type))
@@ -181,5 +181,5 @@ def get_jobs(keyword, num_jobs, verbose):
 
 
 #This line will open a new chrome window and start the scraping.
-df = get_jobs("data scientist", 5, True)
+df = get_jobs("data scientist", 5, False)
 print(df)
