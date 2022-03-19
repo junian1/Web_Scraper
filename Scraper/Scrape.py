@@ -79,7 +79,7 @@ def get_jobs(keyword, num_jobs, verbose):
                     salary_estimate = -1  # You need to set a "not found value. It's important."
 
                 try:
-                    rating = driver.find_element(By.XPATH, ('//div[@class="d-flex flex-column job-search-key-1pzmdmc e1rrn5ka1"]/child::span')).text
+                    rating = driver.find_element(By.XPATH, ('//li[@class="react-job-listing css-bkasv9 eigr9kq0"]/child::div[@class="d-flex flex-column job-search-key-1pzmdmc e1rrn5ka1"]/child::span')).text
                 except NoSuchElementException:
                     rating = -1  # You need to set a "not found value. It's important."
 
@@ -128,11 +128,6 @@ def get_jobs(keyword, num_jobs, verbose):
                 except NoSuchElementException:
                     revenue = -1
 
-                try:
-                    competitors = driver.find_element(By.XPATH, ('.//div[@class="p-std"]//*[text()="Competitors"]//following-sibling::*')).text
-                except NoSuchElementException:
-                    competitors = -1
-
             except NoSuchElementException:  # Rarely, some job postings do not have the "Company" tab.
                 size = -1
                 founded = -1
@@ -140,7 +135,6 @@ def get_jobs(keyword, num_jobs, verbose):
                 industry = -1
                 sector = -1
                 revenue = -1
-                competitors = -1
 
             if verbose:
                 print("Size: {}".format(size))
@@ -149,7 +143,6 @@ def get_jobs(keyword, num_jobs, verbose):
                 print("Industry: {}".format(industry))
                 print("Sector: {}".format(sector))
                 print("Revenue: {}".format(revenue))
-                print("Competitors: {}".format(competitors))
 
             jobs.append({"Job Title": job_title,
                          "Salary Estimate": salary_estimate,
@@ -162,8 +155,7 @@ def get_jobs(keyword, num_jobs, verbose):
                          "Type": ownership_type,
                          "Sector": sector,
                          "Industry": industry,
-                         "Revenue": revenue,
-                         "Competitors": competitors})
+                         "Revenue": revenue})
             # add job to jobs
 
         # Clicking on the "next page" button
@@ -178,8 +170,3 @@ def get_jobs(keyword, num_jobs, verbose):
 
 
 
-
-
-#This line will open a new chrome window and start the scraping.
-df = get_jobs("data scientist", 5, False)
-print(df)
