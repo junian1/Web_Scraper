@@ -73,22 +73,22 @@ def get_jobs(keyword, num_jobs, verbose):
                 except NoSuchElementException:
                     time.sleep(5)
 
-                '''try:
-                    salary_estimate = driver.find_elements(By.CLASS_NAME, ("job-search-key-1hbqxax"))[len(jobs)].text
+                try:
+                    salary_estimate = driver.find_element(By.XPATH, ('//li[@class="react-job-listing css-bkasv9 eigr9kq0"]/child::div[@class="d-flex flex-column pl-sm css-1buaf54 job-search-key-1mn3dn8 e1rrn5ka0"]/child::div[3]/child::div')).text
                 except NoSuchElementException:
                     salary_estimate = -1  # You need to set a "not found value. It's important."
 
                 try:
-                    rating = driver.find_elements(By.CLASS_NAME, ("job-search-key-srfzj0"))[len(jobs)].text
+                    rating = driver.find_element(By.XPATH, ('//div[@class="d-flex flex-column job-search-key-1pzmdmc e1rrn5ka1"]/child::span')).text
                 except NoSuchElementException:
-                    rating = -1  # You need to set a "not found value. It's important."'''
+                    rating = -1  # You need to set a "not found value. It's important."
 
             # Printing for debugging
             if verbose:
                 print("Job Title: {}".format(job_title))
-                #print("Salary Estimate: {}".format(salary_estimate))
+                print("Salary Estimate: {}".format(salary_estimate))
                 print("Job Description: {}".format(job_description[:500]))
-                #print("Rating: {}".format(rating))
+                print("Rating: {}".format(rating))
                 print("Company Name: {}".format(company_name))
                 print("Location: {}".format(location))
 
@@ -142,7 +142,7 @@ def get_jobs(keyword, num_jobs, verbose):
                 revenue = -1
                 competitors = -1
 
-            if verbose:
+            if not verbose:
                 print("Size: {}".format(size))
                 print("Founded: {}".format(founded))
                 print("Type: {}".format(ownership_type))
@@ -152,9 +152,9 @@ def get_jobs(keyword, num_jobs, verbose):
                 print("Competitors: {}".format(competitors))
 
             jobs.append({"Job Title": job_title,
-                         #"Salary Estimate": salary_estimate,
+                         "Salary Estimate": salary_estimate,
                          "Job Description": job_description,
-                         #"Rating": rating,
+                         "Rating": rating,
                          "Company Name": company_name,
                          "Location": location,
                          "Size": size,
@@ -181,5 +181,5 @@ def get_jobs(keyword, num_jobs, verbose):
 
 
 #This line will open a new chrome window and start the scraping.
-df = get_jobs("data scientist", 5, False)
+df = get_jobs("data scientist", 5, True)
 print(df)
