@@ -1,6 +1,4 @@
-import numpy as np 
 import pandas as pd
-import re
 
 
 path = 'glassdoor_jobs_da.csv'
@@ -19,6 +17,7 @@ dfsal.Salary_Estimate = dfsal.Salary_Estimate.apply(lambda x: x.replace('K','000
 dfsal['Min_Salary'] = dfsal.Salary_Estimate.apply(lambda x: int(x.split('-')[0]))
 dfsal['Max_Salary'] = dfsal.Salary_Estimate.apply(lambda x: int(x.split('-')[-1]))
 
+
 # Clean size data
 df.Size = df.Size.astype('str')
 dfsize = df[(df.Size != '-1')&(df.Size != 'Unknown')&(df.Size != 'nan')]
@@ -28,6 +27,18 @@ dfnosize = df[df.Size == '-1']
 dfsize.Size = dfsize.Size.apply(lambda x: x.replace('Employees','').replace('to','-').replace('+',''))
 dfsize['Min_Size'] = dfsize.Size.apply(lambda x: int(x.split('-')[0]))
 dfsize['Max_Size'] = dfsize.Size.apply(lambda x: int(x.split('-')[-1]))
+
+
+# Clean rating
+dfrate = df[df.Rating != -1]
+
+# Clean founded year
+dfyear = df[df.Founded != -1]
+dfyear['Duration'] = 2022 - df.Founded
+
+# Clean company type
+dftype = df[(df.Type != '-1')&(df.Type != 'Unknown')]
+dftype['IsPrivate'] = dftype.Type.apply(lambda x: 1 if 'Private' in x else 0)
 
 
 # Search through JD for specific skillset
@@ -42,12 +53,10 @@ df['jd_panda'] = df.Job_Description.apply(lambda x: 1 if 'panda' in x.lower() el
 df['jd_numpy'] = df.Job_Description.apply(lambda x: 1 if 'numpy' in x.lower() else 0)
 df['jd_spss'] = df.Job_Description.apply(lambda x: 1 if 'spss' in x.lower() else 0)
 df['jd_stats'] = df.Job_Description.apply(lambda x: 1 if 'statistic' in x.lower() else 0)
-df['jd_psych'] = df.Job_Description.apply(lambda x: 1 if 'psychology' in x.lower() else 0)
+df['jd_excel'] = df.Job_Description.apply(lambda x: 1 if 'excel' in x.lower() else 0)
 df['jd_ml'] = df.Job_Description.apply(lambda x: 1 if 'machine learning' in x.lower() else 0)
 df['jd_ds'] = df.Job_Description.apply(lambda x: 1 if 'data science' in x.lower() else 0)
-df['jd_exp'] = df.Job_Description.apply(lambda x: 1 if 'experiment' in x.lower() else 0)
-df['jd_rdm'] = df.Job_Description.apply(lambda x: 1 if 'random' in x.lower() else 0)
-df['jd_remote'] = df.Job_Description.apply(lambda x: 1 if 'remote' in x.lower() else 0)
+
 
 df.columns
 
@@ -63,5 +72,10 @@ df.loc[df['Job_Title'].str.lower().str.contains('|'.join(senior)), 'Rank'] = 3
 df.loc[df['Job_Title'].str.lower().str.contains('|'.join(manager)), 'Rank'] = 4
 df.loc[df.Rank.isna(), 'Rank'] = 0
 
+df[['Min_Salary','Max_Salary']] = dfsal[['Min_Salary','Max_Salary']]
+df['Rate'] = dfrate['Rating']
+df[['Min_Size','Max_Size']] = dfsize[['Min_Size','Max_Size']] 
+df['Duration'] = dfyear['Duration']
+df['IsPrivate'] = dftype['IsPrivate']
 
-
+df.to_csv('glassdoor_job_clean.csv')
