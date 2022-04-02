@@ -8,7 +8,8 @@ df = pd.read_csv(path)
 df.Company_Name = df.Company_Name.apply(lambda x: x.split("\n")[0])
 
 # Clean salary data separately
-dfsal = df[df.Salary_Estimate!= '-1']
+df.Salary_Estimate = df.Salary_Estimate
+dfsal = df[(df.Salary_Estimate != '-1')&(df.Salary_Estimate.notna())]
 dfnosal = df[df.Salary_Estimate== '-1']
 
 # Clean salary estimate into min salary and max salary, if only 1 value available, then min salary = max salary
@@ -37,7 +38,7 @@ dfyear = df[df.Founded != -1]
 dfyear['Duration'] = 2022 - df.Founded
 
 # Clean company type
-dftype = df[(df.Type != '-1')&(df.Type != 'Unknown')]
+dftype = df[(df.Type != '-1')&(df.Type != 'Unknown')].astype('str')
 dftype['IsPrivate'] = dftype.Type.apply(lambda x: 1 if 'Private' in x else 0)
 
 
@@ -58,18 +59,18 @@ df['jd_ml'] = df.Job_Description.apply(lambda x: 1 if 'machine learning' in x.lo
 df['jd_ds'] = df.Job_Description.apply(lambda x: 1 if 'data science' in x.lower() else 0)
 
 
-df.columns
-
-# Add Rank, 0 = null, 1 = intern, 2 = junior, 3 = senior, 4 = manager
+# Add Rank, 0 = null, 1 = intern, 2 = junior, 3 = senior, 4 = manager, 5 = director
 intern = ['intern']
-junior = ['junior','jr','jnr','fresh','graduate']
-senior = ['senior','sr','snr']
-manager = ['manager','mgr','mngr']
+junior = ['junior','jr','jnr','fresh','graduate','entry']
+senior = ['senior','sr','snr','special','expert']
+manager = ['manager','mgr','mngr','lead']
+director = ['director','chief','head']
 
 df.loc[df['Job_Title'].str.lower().str.contains('|'.join(intern)), 'Rank'] = 1
 df.loc[df['Job_Title'].str.lower().str.contains('|'.join(junior)), 'Rank'] = 2 
 df.loc[df['Job_Title'].str.lower().str.contains('|'.join(senior)), 'Rank'] = 3
 df.loc[df['Job_Title'].str.lower().str.contains('|'.join(manager)), 'Rank'] = 4
+df.loc[df['Job_Title'].str.lower().str.contains('|'.join(director)), 'Rank'] = 5
 df.loc[df.Rank.isna(), 'Rank'] = 0
 
 df[['Min_Salary','Max_Salary']] = dfsal[['Min_Salary','Max_Salary']]
