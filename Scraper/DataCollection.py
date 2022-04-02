@@ -1,6 +1,7 @@
-import Scrape as sp
+import Scraper as sp
 import pandas as pd
 
-df = sp.get_jobs("data analyst", 1000, False)
+# Can only do a maximum of 1000 at a time due to glassdoor limit
+df = sp.get_jobs("data scientist specialist", 1000, False)
 df.to_csv("glassdoor_jobs.csv", index=False)
 

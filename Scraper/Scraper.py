@@ -18,7 +18,6 @@ def get_jobs(keyword, num_jobs, verbose):
     # Change the path to where chromedriver is in your home folder.
     driver = webdriver.Chrome(
         service=Service("C:/Users/junia/desktop/Web_Scraper/Webdriver/chromedriver.exe"))
-        #executable_path="Users/junia/Downloads/chromedriver_win32", options=options)
     driver.set_window_size(1120, 1000)
 
     url = 'https://www.glassdoor.com/Job/jobs.htm?sc.keyword=' + keyword + '&locT=N&locId=170'
@@ -162,6 +161,7 @@ def get_jobs(keyword, num_jobs, verbose):
                 pass
 
         # Clicking on the "next page" button
+        # When in the last page, "next button" still redirect to the last page
         try:
             driver.find_element(By.XPATH, ('.//button[@class="nextButton css-1hq9k8 e13qs2071"]')).click()
             time.sleep(3)
